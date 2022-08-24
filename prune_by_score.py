@@ -19,13 +19,14 @@ def main(opt):
         cls, cls_prob, latency = model.infer(img)
         score = cls_prob[opt.cls]
         imgs.append((fp, score))
+    assert len(imgs) > opt.drop, \
+        "Number of images to be dropped must be less than number of images in the dataset"
     imgs.sort(key=lambda x: x[1])
     # Pareto principle 80/20
-    hard_num = int(0.2*len(imgs))
+    keep_ratio = (len(imgs)-opt.drop)/5/len(imgs)
+    hard_num = int(keep_ratio*len(imgs))
     hard_imgs = imgs[:hard_num]
     easy_imgs = imgs[hard_num:]
-    assert len(easy_imgs) > opt.drop, \
-        "Number of images to be dropped must be less than 0.8 of the dataset"
     easy_imgs = random.sample(easy_imgs, len(easy_imgs)-opt.drop)
     imgs = hard_imgs + easy_imgs
     print("Writing new dataset...")
@@ -62,7 +63,7 @@ if __name__ == "__main__":
                         help='path to model weights')
     parser.add_argument('--device',
                         type=str,
-                        required=True,
+                        default="cpu",
                         help='device to run model')
     parser.add_argument('--input-shape',
                         type=int,
@@ -74,6 +75,4 @@ if __name__ == "__main__":
                         help='class for classification')
 
     opt = parser.parse_args()
-    if not 0 < opt.ratio < 1:
-        raise Exception("Drop ratio should be in range (0, 1)")
     main(opt)

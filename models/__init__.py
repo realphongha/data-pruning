@@ -1,5 +1,5 @@
 from .classifer import *
 
 MODELS = {
-    "classifer_onnx": ClassiferOnnx,
+    "classifier_onnx": ClassiferOnnx,
 }
