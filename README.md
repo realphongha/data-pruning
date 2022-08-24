@@ -1,1 +1,1 @@
-# unsupervised-data-pruning
+# Data-pruning
