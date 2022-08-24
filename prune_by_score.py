@@ -46,7 +46,7 @@ if __name__ == "__main__":
                         required=True,
                         help='path to destination directory')
     parser.add_argument('--drop',
-                        type=float,
+                        type=int,
                         required=True,
                         help='number of images to be dropped')
     parser.add_argument('--model',
